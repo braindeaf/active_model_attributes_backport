@@ -4,9 +4,7 @@ module ActiveModelAttributes
       extend ActiveSupport::Concern
 
       module ClassMethods
-        require 'active_record'
         require 'active_support/core_ext/hash/keys'
-        require 'active_record/type'
 
         def lookup(symbol)
           registry[symbol]
@@ -17,7 +15,7 @@ module ActiveModelAttributes
         end
 
         def default_value
-          @default_value ||= ActiveRecord::Type::Value.new
+          @default_value ||= ActiveModel::Type::Value.new
         end
 
         private
@@ -30,6 +28,7 @@ module ActiveModelAttributes
 
         def find_type(name)
           classified = ActiveSupport::Inflector.classify(name.to_s)
+          binding.pry
           ActiveRecord::Type.const_get(classified)
         rescue NameError
           raise ArgumentError, "Unknown type #{name}"
